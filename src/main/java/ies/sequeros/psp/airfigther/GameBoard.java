@@ -1,5 +1,7 @@
 package ies.sequeros.psp.airfigther;
 
+import ies.sequeros.psp.airfigther.base.Point2D;
+import ies.sequeros.psp.airfigther.base.Speed;
 import ies.sequeros.psp.airfigther.engine.Collision;
 import ies.sequeros.psp.airfigther.engine.GameContext;
 import ies.sequeros.psp.airfigther.engine.GameStatus;
@@ -11,6 +13,7 @@ import ies.sequeros.psp.airfigther.model.Element;
 import ies.sequeros.psp.airfigther.model.Player;
 import ies.sequeros.psp.airfigther.model.enemy.Enemy;
 import ies.sequeros.psp.airfigther.model.enemy.EnemyFactory;
+import ies.sequeros.psp.airfigther.model.enemy.EnemyType;
 import ies.sequeros.psp.airfigther.view.ScrollingBackground;
 
 import java.awt.*;
@@ -54,6 +57,7 @@ public class GameBoard {
         rand = new Random();
         this.keyboardStatus = keyboardStatus;
         this.elements = new ArrayList<Element>();
+        elements.add(new Enemy(EnemyType.B17, new Point2D(200, 200), new Speed(1, 1), area));
     }
 
 
@@ -279,5 +283,9 @@ public class GameBoard {
 
     public List<Element> getElements() {
         return this.elements;
+    }
+
+    public Object G() {
+        return null;
     }
 }

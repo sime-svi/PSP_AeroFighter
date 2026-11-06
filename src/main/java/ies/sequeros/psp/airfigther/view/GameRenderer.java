@@ -4,6 +4,7 @@ import ies.sequeros.psp.airfigther.GameBoard;
 import ies.sequeros.psp.airfigther.engine.GameContext;
 import ies.sequeros.psp.airfigther.engine.GameStatus;
 import ies.sequeros.psp.airfigther.model.Bullet;
+import ies.sequeros.psp.airfigther.model.Element;
 import ies.sequeros.psp.airfigther.model.Player;
 import ies.sequeros.psp.airfigther.model.enemy.Enemy;
 
@@ -44,6 +45,7 @@ public class GameRenderer extends Thread {
             long updateLength = now - lastUpdateTime;
             lastUpdateTime = now;
 
+            gameBoard.processInput();
             //DECIDIR EN FUNCIÓN DEL ESTADO QUE HACER, CASI
             //SIEMPRE LLAMAR AL JPANEL PARA REPINTAR
             gamePanel.repaint();
@@ -90,19 +92,55 @@ public class GameRenderer extends Thread {
                 p.getSize().getWidth(), p.getSize().getHeight(), null
         );
     }
+
+    private void renderEnemy(Graphics g) {
+        for (Element element : gameBoard.getElements()) {
+            if (element instanceof Enemy e) {
+                g.drawImage(EnemySpriterMapper.getImageResource(e.getType()).getImage(),
+                        (int) e.getPosition().getX(),
+                        (int) e.getPosition().getY(),
+                        e.getSize().getWidth(), e.getSize().getHeight(), null
+                );
+            }
+        }
+    }
     public void render(Graphics g) {
         int width = this.gameBoard.getArea().width;
         int height = this.gameBoard.getArea().height;
+        String subText = "";
+        int textWidthSub = 0;
         if (this.gameBoard != null) {
 
             this.renderBackground(g,width,height);
+
             //dibujar los elementos
             this.renderPlayer(g);
+            this.renderEnemy(g);
 
-            //RECORRER EL RESTO DE ELEMNTOS Y DIBUJARLO
+            //Manejo de contexto
+            switch (gameContext.getStatus()) {
+                case MENU:
+                    g.setColor(Color.WHITE);
+                    g.setFont(new Font("Arial", Font.PLAIN, 16));
+                    subText = "Menu";
+                    textWidthSub = g.getFontMetrics().stringWidth(subText);
+                    g.drawString(subText, (width - textWidthSub) / 2, (height / 2) + 40);
+                    break;
+                case PAUSED:
+                    g.setColor(Color.WHITE);
+                    g.setFont(new Font("Arial", Font.PLAIN, 16));
+                    subText = "Pausa";
+                    textWidthSub = g.getFontMetrics().stringWidth(subText);
+                    g.drawString(subText, (width - textWidthSub) / 2, (height / 2) + 40);
+                    break;
+                case PLAYING:
+                    this.hud.render(g, gameBoard.getPlayer(), gameContext, gameBoard.getArea().width );
+                    if (gameContext.isDebugMode()) {
+                        renderDebug(g);
+                    }
+                    break;
 
-            //MIRAR SI ESTA EN MODO DEBUG Y DIBUJAR EL RECUADRO
-
+            }
             g.setColor(Color.BLACK);
 
             //DIBUJAR LOS DIFERENTES TEXTOS EN FUNCIÓN DEL ESTADO
@@ -114,7 +152,13 @@ public class GameRenderer extends Thread {
     }
 
     public void renderDebug(Graphics g) {
-            
+        Player p = gameBoard.getPlayer();
+        g.setColor(Color.GREEN);
+        g.drawRect((int) p.getPosition().getX() , (int) p.getPosition().getY(), p.getSize().getWidth(), p.getSize().getHeight());
+        for (Element e : gameBoard.getElements()) {
+            g.setColor(Color.RED);
+            g.drawRect((int) e.getPosition().getX() , (int) e.getPosition().getY(), e.getSize().getWidth(), e.getSize().getHeight());
+        }
     }
 
 }
