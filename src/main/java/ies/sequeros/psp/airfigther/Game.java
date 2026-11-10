@@ -9,6 +9,7 @@ import ies.sequeros.psp.airfigther.engine.GameStatus;
 import ies.sequeros.psp.airfigther.input.KeyBoardStatus;
 import ies.sequeros.psp.airfigther.model.Player;
 import ies.sequeros.psp.airfigther.view.GameRenderer;
+import ies.sequeros.psp.airfigther.view.PhysicsEngine;
 import ies.sequeros.psp.airfigther.view.ScrollingBackground;
 
 import javax.swing.*;
@@ -27,11 +28,11 @@ public class Game extends JPanel {
 
     private final GameBoard gameBoard;
     private final GameRenderer gameRenderer;
+    private final PhysicsEngine pyshicsEngine;
     //private volatile Player player;
 
 
     private JFrame windows;
-
     private GameContext gameContext = new GameContext(GameStatus.MENU, false);
     private KeyBoardStatus keyboardStatus;
 
@@ -65,7 +66,9 @@ public class Game extends JPanel {
                 this.gameContext, this.gameBoard, this);
 
         // Iniciar los hilos
+        this.pyshicsEngine = new PhysicsEngine(this.gameBoard , this.gameContext);
 
+        this.pyshicsEngine.start();
         this.gameRenderer.start();
     }
 
