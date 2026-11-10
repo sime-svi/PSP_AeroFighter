@@ -13,7 +13,6 @@ public class PhysicsEngine extends Thread{
     public PhysicsEngine(GameBoard gameBoard, GameContext gameContext) {
         this.gameContext = gameContext;
         this.gameBoard = gameBoard;
-
     }
 
     public void run() {
