@@ -182,7 +182,7 @@ public class GameBoard {
                     this.gameContext.setStatus(GameStatus.GAME_OVER);
                 }
             } else {
-                //se borran los dos
+
                 this.elements = this.removeElements(c.getOne());
                 this.elements = this.removeElements(c.getTwo());
                 this.player.incScore(10);
@@ -229,6 +229,7 @@ public class GameBoard {
             List<Element> temporal = new ArrayList<>(this.elements);
             temporal.addAll(nuevasBalas);
             this.elements = temporal;
+            this.gameContext.putSound(SoundEffect.ENEMYSHOOT);
         }
     }
 

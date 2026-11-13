@@ -6,6 +6,7 @@ import ies.sequeros.psp.airfigther.base.Speed;
 import ies.sequeros.psp.airfigther.engine.GameContext;
 import ies.sequeros.psp.airfigther.engine.GameStatus;
 
+import ies.sequeros.psp.airfigther.engine.audio.EfectosSonoros;
 import ies.sequeros.psp.airfigther.engine.audio.MusicaFondo;
 import ies.sequeros.psp.airfigther.input.KeyBoardStatus;
 import ies.sequeros.psp.airfigther.model.Player;
@@ -31,6 +32,7 @@ public class Game extends JPanel {
     private final GameRenderer gameRenderer;
     private final PhysicsEngine pyshicsEngine;
     private final MusicaFondo musicaFondo;
+    private final EfectosSonoros efectosSonoros;
     //private volatile Player player;
 
 
@@ -70,10 +72,12 @@ public class Game extends JPanel {
         // Iniciar los hilos
         this.pyshicsEngine = new PhysicsEngine(this.gameBoard , this.gameContext);
         this.musicaFondo = new MusicaFondo(this.gameContext);
+        this.efectosSonoros = new EfectosSonoros(this.gameContext);
 
         this.pyshicsEngine.start();
         this.gameRenderer.start();
         this.musicaFondo.start();
+        this.efectosSonoros.start();
     }
 
 
