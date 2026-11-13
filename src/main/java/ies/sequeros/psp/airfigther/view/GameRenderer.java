@@ -101,6 +101,21 @@ public class GameRenderer extends Thread {
             }
         }
     }
+    private void renderBullets(Graphics g) {
+        for (Element element : gameBoard.getElements()) {
+            if (element instanceof Bullet b) {
+                ImageResource img;
+                if (b.getOwnerType() == Bullet.OwnerType.Player) {
+                    img = ImageResource.BALAPLAYER;
+                } else {
+                    img = ImageResource.BALAENEMY;
+                }
+                g.drawImage(img.getImage(), (int) b.getPosition().getX(), (int) b.getPosition().getY(),
+                        b.getSize().getWidth(), b.getSize().getHeight(), null);
+            }
+        }
+    }
+
     public void render(Graphics g) {
         int width = this.gameBoard.getArea().width;
         int height = this.gameBoard.getArea().height;
@@ -113,6 +128,7 @@ public class GameRenderer extends Thread {
             //dibujar los elementos
             this.renderPlayer(g);
             this.renderEnemy(g);
+            this.renderBullets(g);
 
             //Manejo de contexto
             switch (gameContext.getStatus()) {

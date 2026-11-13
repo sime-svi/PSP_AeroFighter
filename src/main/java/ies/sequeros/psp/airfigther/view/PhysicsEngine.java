@@ -22,8 +22,10 @@ public class PhysicsEngine extends Thread{
             long updateLength = now - lastUpdateTime;
             lastUpdateTime = now;
 
-            gameBoard.processInput();
-            gameBoard.update(now - lastUpdateTime);
+            gameBoard.processInput();   // siempre: la tecla P es la que sale del menú y de la pausa
+            if (gameContext.getStatus() == GameStatus.PLAYING) {
+                gameBoard.update(updateLength);   // now - lastUpdateTime esta mal porque siempre es 0
+            }
 
 
             long processingTime = System.nanoTime() - lastUpdateTime;

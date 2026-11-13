@@ -61,23 +61,16 @@ public class Game extends JPanel {
                 enemyShootProbability,
                 area,
                 this.gameContext);
-        //CREAR E INICIAR LOS HILOS
-        //HILO PARA PINTAR
-        //HILO MUSICA DE FONDO
-        //HILO EFECTOS SONIDO
-        //HILO DE LA FISICA
-        this.gameRenderer = new GameRenderer(
-                this.gameContext, this.gameBoard, this);
 
-        // Iniciar los hilos
-        this.pyshicsEngine = new PhysicsEngine(this.gameBoard , this.gameContext);
+        this.gameRenderer = new GameRenderer(this.gameContext, this.gameBoard, this);
+        this.pyshicsEngine = new PhysicsEngine(this.gameBoard, this.gameContext);
         this.musicaFondo = new MusicaFondo(this.gameContext);
         this.efectosSonoros = new EfectosSonoros(this.gameContext);
 
+        this.efectosSonoros.start();
+        this.musicaFondo.start();
         this.pyshicsEngine.start();
         this.gameRenderer.start();
-        this.musicaFondo.start();
-        this.efectosSonoros.start();
     }
 
 
@@ -122,17 +115,18 @@ public class Game extends JPanel {
     public void exit() {
         this.gameContext.setStatus(GameStatus.GAME_OVER);
         try {
-
-            if (gameRenderer != null)
-                gameRenderer.join();
+            if (pyshicsEngine != null)  pyshicsEngine.join();   // primero quien produce sonidos
+            if (gameRenderer != null)   gameRenderer.join();
+            if (efectosSonoros != null) efectosSonoros.join();  // al final quien los consume
             System.out.println("fin de juego");
-        System.exit(0);
+            System.exit(0);   // esto es lo que corta la música
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
+
     public static void main(String[] args) throws InterruptedException {
-        Game game = new Game(7,  2, new Rectangle(0, 0,
+        Game game = new Game(7, 2, new Rectangle(0, 0,
                 WIDTH,
                 HEIGHT));
     }
